@@ -16,7 +16,7 @@ export default function Home() {
           href: "/produtos",
         }}
       />
-      <div className="flex justify-center max-w-7xl mx-auto p-24 gap-24">
+      <div className="flex justify-center max-w-7xl mx-auto p-20 gap-24">
         <FeatureCard
           icon={<TruckIcon className="w-6 h-6" strokeWidth={1.5} />}
           title="Frete grátis"
