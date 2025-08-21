@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "../ui/button";
-import { ArrowRightIcon } from "lucide-react";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '../ui/button';
+import { ArrowRightIcon } from 'lucide-react';
 
 interface IBannerProps {
   title: string;
@@ -13,12 +13,7 @@ interface IBannerProps {
   };
 }
 
-export default function Banner({
-  title,
-  description,
-  image,
-  action,
-}: IBannerProps) {
+export default function Banner({ title, description, image, action }: IBannerProps) {
   return (
     <section className="flex justify-center items-center bg-accent">
       <div className="flex items-center gap-48 max-w-7xl mx-auto">
@@ -28,12 +23,7 @@ export default function Banner({
             <p className="text-base text-neutral-600">{description}</p>
           </div>
           {action && (
-            <Button
-              variant="default"
-              className="bg-primary w-fit"
-              asChild
-              size="lg"
-            >
+            <Button variant="default" className="bg-primary w-fit" asChild size="lg">
               <Link href={action.href}>
                 {action.text}
                 <ArrowRightIcon className="w-4 h-4" />
@@ -41,14 +31,7 @@ export default function Banner({
             </Button>
           )}
         </div>
-        <Image
-          className="pt-16"
-          src={image}
-          alt="Banner Novos Produtos"
-          width={300}
-          height={300}
-          priority
-        />
+        <Image className="pt-16" src={image} alt="Banner Novos Produtos" width={300} height={300} priority />
       </div>
     </section>
   );

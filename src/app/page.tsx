@@ -1,7 +1,7 @@
-import Banner from "@/components/banner/page";
-import FeatureCard from "@/components/feature-card/page";
-import Header from "@/components/header/page";
-import { AwardIcon, ShieldCheckIcon, TruckIcon } from "lucide-react";
+import Banner from '@/components/banner/page';
+import FeatureCard from '@/components/feature-card/page';
+import Header from '@/components/header/page';
+import { AwardIcon, ShieldCheckIcon, TruckIcon } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -12,8 +12,8 @@ export default function Home() {
         description="Descubra nossa mais nova coleção hoje mesmo."
         image="/banner-image.png"
         action={{
-          text: "Ver coleção completa",
-          href: "/produtos",
+          text: 'Ver coleção completa',
+          href: '/produtos',
         }}
       />
       <div className="flex justify-center max-w-7xl mx-auto p-20 gap-24">

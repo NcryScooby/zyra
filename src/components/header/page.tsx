@@ -1,12 +1,8 @@
-import Image from "next/image";
-import NotificationBar from "../notification-bar/page";
-import Link from "next/link";
-import { Input } from "../ui/input";
-import {
-  CircleUserRoundIcon,
-  SearchIcon,
-  ShoppingCartIcon,
-} from "lucide-react";
+import Image from 'next/image';
+import NotificationBar from '../notification-bar/page';
+import Link from 'next/link';
+import { Input } from '../ui/input';
+import { CircleUserRoundIcon, SearchIcon, ShoppingCartIcon } from 'lucide-react';
 
 export default function Header() {
   return (
@@ -14,20 +10,14 @@ export default function Header() {
       <NotificationBar
         text="Ganhe 25% de desconto no seu primeiro pedido."
         link={{
-          href: "/produtos",
-          text: "Comprar Agora",
+          href: '/produtos',
+          text: 'Comprar Agora',
         }}
       />
       <header className="flex justify-between items-center py-5 max-w-7xl mx-auto">
         <div className="flex items-center gap-32">
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/logo.svg"
-              alt="Logo"
-              width={100}
-              height={40}
-              className="w-25 h-10"
-            />
+            <Image src="/logo.svg" alt="Logo" width={100} height={40} className="w-25 h-10" />
           </Link>
           <ul className="flex items-center gap-4 text-neutral-600">
             <li>
