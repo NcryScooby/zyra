@@ -8,13 +8,13 @@ import { StatusCodes } from 'http-status-codes';
 export class ProductController {
   constructor(private readonly service: ProductService) {}
 
-  get = controller(() => this.service.findAll(), { successStatus: StatusCodes.OK });
+  findAll = controller(() => this.service.findAll(), { successStatus: StatusCodes.OK });
 
-  post = withValidation(createProductFormPipeline, (req: NextRequest) => req.formData())(
+  create = withValidation(createProductFormPipeline, (req: NextRequest) => req.formData())(
     controller((data) => this.service.create(data), { successStatus: StatusCodes.CREATED })
   );
 
-  getById = withValidation(productParamsSchema, (_req: NextRequest, ctx: { params: { id: string } }) => ({
+  findById = withValidation(productParamsSchema, (_req: NextRequest, ctx: { params: { id: string } }) => ({
     id: ctx.params.id,
   }))(controller(({ id }) => this.service.findById(id)));
 }
