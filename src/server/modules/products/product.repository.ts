@@ -16,6 +16,14 @@ export class ProductRepository {
     return this.prismaService.product.create(argsCreate);
   }
 
+  update(argsUpdate: Prisma.ProductUpdateArgs): Promise<Product> {
+    return this.prismaService.product.update(argsUpdate);
+  }
+
+  delete(argsDelete: Prisma.ProductDeleteArgs): Promise<Product> {
+    return this.prismaService.product.delete(argsDelete);
+  }
+
   createImage(argsCreate: Prisma.ProductImageCreateArgs): Promise<ProductImage> {
     return this.prismaService.productImage.create(argsCreate);
   }

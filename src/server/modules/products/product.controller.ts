@@ -1,44 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { productService } from './product.service';
-import { productFormSchema, createProductSchema } from './dto/create-product.dto';
+import type { NextRequest } from 'next/server';
+import { withValidation } from '@/lib/validate';
+import { controller } from '@/lib/controller';
+import { createProductFormPipeline, productParamsSchema } from './dto/product.dto';
+import { productService, type ProductService } from './product.service';
+import { StatusCodes } from 'http-status-codes';
 
 export class ProductController {
-  async get() {
-    try {
-      const products = await productService.findAll();
-      return NextResponse.json({ data: products });
-    } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
-      return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
-    }
-  }
+  constructor(private readonly service: ProductService) {}
 
-  async post(req: NextRequest) {
-    try {
-      const formData = await req.formData();
-      const parsed = productFormSchema.parse(formData);
+  get = controller(() => this.service.findAll(), { successStatus: StatusCodes.OK });
 
-      const input = createProductSchema.parse({
-        name: parsed.name,
-        basePrice: parsed.basePrice,
-        specialPrice: parsed.specialPrice,
-        balance: parsed.balance,
-        images: parsed.images as File[],
-      });
+  post = withValidation(createProductFormPipeline, (req: NextRequest) => req.formData())(
+    controller((data) => this.service.create(data), { successStatus: StatusCodes.CREATED })
+  );
 
-      const product = await productService.create(input);
-      return NextResponse.json(product, { status: 201 });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        return NextResponse.json({ error: 'Dados inválidos', issues: err.flatten() }, { status: 400 });
-      }
-      if (err instanceof Error && err.message === 'Esse produto já existe') {
-        return NextResponse.json({ error: err.message }, { status: 409 });
-      }
-      return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
-    }
-  }
+  getById = withValidation(productParamsSchema, (_req: NextRequest, ctx: { params: { id: string } }) => ({
+    id: ctx.params.id,
+  }))(controller(({ id }) => this.service.findById(id)));
 }
 
-export const productController = new ProductController();
+export const productController = new ProductController(productService);
