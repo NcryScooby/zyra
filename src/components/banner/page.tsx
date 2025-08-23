@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { ArrowRightIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface IBannerProps {
   title: string;
@@ -11,11 +12,12 @@ interface IBannerProps {
     text: string;
     href: string;
   };
+  className?: string;
 }
 
-export default function Banner({ title, description, image, action }: IBannerProps) {
+export default function Banner({ title, description, image, action, className }: IBannerProps) {
   return (
-    <section className="flex justify-center items-center bg-accent">
+    <section className={cn('flex justify-center items-center bg-accent', className)}>
       <div className="flex items-center gap-48 max-w-7xl mx-auto">
         <div className="flex flex-col gap-12 justify-center">
           <div className="flex flex-col gap-2">
@@ -31,7 +33,7 @@ export default function Banner({ title, description, image, action }: IBannerPro
             </Button>
           )}
         </div>
-        <Image className="pt-16" src={image} alt="Banner Novos Produtos" width={300} height={300} priority />
+        <Image className="pt-16 w-auto" src={image} alt="Banner Novos Produtos" width={300} height={300} priority />
       </div>
     </section>
   );

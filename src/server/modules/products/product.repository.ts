@@ -1,26 +1,36 @@
-import type { Prisma, Product, ProductImage, PrismaClient } from '@/generated/prisma';
+import type { Prisma, ProductImage, PrismaClient } from '@/generated/prisma';
 import prisma from '@/lib/prisma';
 
 export class ProductRepository {
   constructor(private readonly prismaService: PrismaClient) {}
 
-  findMany(argsFindMany: Prisma.ProductFindManyArgs): Promise<Product[]> {
+  findMany<T extends Prisma.ProductFindManyArgs>(
+    argsFindMany: Prisma.SelectSubset<T, Prisma.ProductFindManyArgs>
+  ): Promise<Prisma.ProductGetPayload<T>[]> {
     return this.prismaService.product.findMany(argsFindMany);
   }
 
-  findUnique(argsFindUnique: Prisma.ProductFindUniqueArgs): Promise<Product | null> {
+  findUnique<T extends Prisma.ProductFindUniqueArgs>(
+    argsFindUnique: Prisma.SelectSubset<T, Prisma.ProductFindUniqueArgs>
+  ): Promise<Prisma.ProductGetPayload<T> | null> {
     return this.prismaService.product.findUnique(argsFindUnique);
   }
 
-  create(argsCreate: Prisma.ProductCreateArgs): Promise<Product> {
+  create<T extends Prisma.ProductCreateArgs>(
+    argsCreate: Prisma.SelectSubset<T, Prisma.ProductCreateArgs>
+  ): Promise<Prisma.ProductGetPayload<T>> {
     return this.prismaService.product.create(argsCreate);
   }
 
-  update(argsUpdate: Prisma.ProductUpdateArgs): Promise<Product> {
+  update<T extends Prisma.ProductUpdateArgs>(
+    argsUpdate: Prisma.SelectSubset<T, Prisma.ProductUpdateArgs>
+  ): Promise<Prisma.ProductGetPayload<T>> {
     return this.prismaService.product.update(argsUpdate);
   }
 
-  delete(argsDelete: Prisma.ProductDeleteArgs): Promise<Product> {
+  delete<T extends Prisma.ProductDeleteArgs>(
+    argsDelete: Prisma.SelectSubset<T, Prisma.ProductDeleteArgs>
+  ): Promise<Prisma.ProductGetPayload<T>> {
     return this.prismaService.product.delete(argsDelete);
   }
 

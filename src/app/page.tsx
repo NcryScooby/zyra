@@ -1,9 +1,27 @@
 import Banner from '@/components/banner/page';
 import FeatureCard from '@/components/feature-card/page';
 import Header from '@/components/header/page';
+import Showcase from '@/components/showcase/page';
+import { productRepository } from '@/server/modules/products/product.repository';
 import { AwardIcon, ShieldCheckIcon, TruckIcon } from 'lucide-react';
 
-export default function Home() {
+export default async function Home() {
+  const products = await productRepository.findMany({
+    include: {
+      images: {
+        select: {
+          id: true,
+          url: true,
+          createdAt: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take: 4,
+  });
+
   return (
     <>
       <Header />
@@ -31,6 +49,38 @@ export default function Home() {
           icon={<ShieldCheckIcon className="w-6 h-6" strokeWidth={1.5} />}
           title="Compra segura"
           description="Compra segura com pagamento seguro e garantia de qualidade."
+        />
+      </div>
+      <div className="py-20">
+        <Showcase
+          showcaseHeader={
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-neutral-600 uppercase">Compre agora</p>
+              <h2 className="text-2xl font-bold">Mais vendidos</h2>
+            </div>
+          }
+          products={products}
+        />
+      </div>
+      <Banner
+        title="Explore nosso paraíso da moda!"
+        description="Entre em um mundo de estilo e explore nossa coleção diversificada de categorias de roupas."
+        image="/banner-image-2.png"
+        action={{
+          text: 'Comece a navegar',
+          href: '/produtos',
+        }}
+        className="bg-gradient-to-r from-accent to-accent/0"
+      />
+      <div className="py-20">
+        <Showcase
+          showcaseHeader={
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-neutral-600 uppercase">Compre agora</p>
+              <h2 className="text-2xl font-bold">Mais vendidos</h2>
+            </div>
+          }
+          products={products}
         />
       </div>
     </>
