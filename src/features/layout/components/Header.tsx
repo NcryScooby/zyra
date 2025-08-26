@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import NotificationBar from '../notification-bar/page';
+import NotificationBar from '@/features/marketing/components/NotificationBar';
 import Link from 'next/link';
-import { Input } from '../ui/input';
+import { Input } from '@/components/ui/input';
 import { CircleUserRoundIcon, SearchIcon, ShoppingCartIcon } from 'lucide-react';
 
 export default function Header() {

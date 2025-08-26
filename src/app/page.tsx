@@ -1,7 +1,7 @@
-import Banner from '@/components/banner/page';
-import FeatureCard from '@/components/feature-card/page';
-import Header from '@/components/header/page';
-import Showcase from '@/components/showcase/page';
+import Banner from '@/features/marketing/components/Banner';
+import FeatureCard from '@/features/marketing/components/FeatureCard';
+import Header from '@/features/layout/components/Header';
+import Showcase from '@/features/catalog/components/Showcase';
 import { productRepository } from '@/server/modules/products/product.repository';
 import { AwardIcon, ShieldCheckIcon, TruckIcon } from 'lucide-react';
 

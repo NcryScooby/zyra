@@ -1,5 +1,5 @@
 import { Product, ProductImage } from '@/generated/prisma';
-import ProductCard from '../product-card/page';
+import ProductCard from '@/features/catalog/components/ProductCard';
 
 interface IShowcaseProps {
   showcaseHeader: React.ReactNode;

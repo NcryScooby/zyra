@@ -1,6 +1,6 @@
 import { Product, ProductImage } from '@/generated/prisma';
 import Image from 'next/image';
-import { Badge } from '../ui/badge';
+import { Badge } from '@/components/ui/badge';
 import { formatToBRL } from '@/helpers/format-to-brl';
 
 interface IProductCardProps {
