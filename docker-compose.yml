@@ -1,0 +1,70 @@
+name: zyra
+
+services:
+  zyra-db:
+    image: postgres:17
+    container_name: zyra-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-zyra}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zyra}
+      POSTGRES_DB: ${POSTGRES_DB:-zyra}
+      TZ: ${TZ:-UTC}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - zyra_pg_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-zyra} -d ${POSTGRES_DB:-zyra}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  zyra-migrator:
+    image: node:20
+    container_name: zyra-migrator
+    working_dir: /app
+    restart: 'no'
+    depends_on:
+      zyra-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://zyra:zyra@zyra-db:5432/zyra?schema=public
+      NODE_ENV: development
+    volumes:
+      - ./:/app
+    command: sh -lc "npx -y prisma@6.14.0 migrate deploy"
+
+  zyra-seeder:
+    image: postgres:17
+    container_name: zyra-seeder
+    restart: 'no'
+    depends_on:
+      zyra-migrator:
+        condition: service_completed_successfully
+    environment:
+      POSTGRES_USER: zyra
+      POSTGRES_PASSWORD: zyra
+      POSTGRES_DB: zyra
+      PGPASSWORD: zyra
+    volumes:
+      - ./docker/20-seed.sql:/seed/20-seed.sql:ro
+      - zyra_bootstrap_state:/bootstrap-state
+    command: >-
+      sh -lc 'if [ -f /seed/20-seed.sql ]; then \
+        if [ ! -f /bootstrap-state/seeded ]; then \
+          psql -h zyra-db -p 5432 -U zyra -d zyra -v ON_ERROR_STOP=1 -c "TRUNCATE TABLE public.products CASCADE;" && \
+          psql -h zyra-db -p 5432 -U zyra -d zyra -v ON_ERROR_STOP=1 -f /seed/20-seed.sql && \
+          touch /bootstrap-state/seeded; \
+        else \
+          echo "Seed já aplicada"; \
+        fi; \
+      else \
+        echo "Arquivo de seed ausente, ignorando"; \
+      fi'
+
+volumes:
+  zyra_pg_data:
+  zyra_bootstrap_state:

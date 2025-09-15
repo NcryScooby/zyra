@@ -6,7 +6,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "db:psql": "docker exec -it zyra-postgres psql -U ${POSTGRES_USER:-zyra} -d ${POSTGRES_DB:-zyra}",
+    "db:seed": "docker exec -i zyra-postgres psql -U ${POSTGRES_USER:-zyra} -d ${POSTGRES_DB:-zyra} -c 'TRUNCATE TABLE public.products CASCADE;' && docker exec -i zyra-postgres psql -U ${POSTGRES_USER:-zyra} -d ${POSTGRES_DB:-zyra} < docker/20-seed.sql",
+    "db:wait": "sh -c 'until docker exec zyra-postgres pg_isready -U ${POSTGRES_USER:-zyra} -d ${POSTGRES_DB:-zyra}; do sleep 1; done'",
+    "db:bootstrap": "npm run db:reset && npm run db:wait && npx prisma migrate deploy && npm run db:seed",
+    "db:destroy": "docker compose down -v --remove-orphans && docker volume rm zyra_zyra_pg_data zyra_zyra_bootstrap_state 2>/dev/null || true"
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
